@@ -1,0 +1,66 @@
+details > * {
+	margin: 0;
+}
+details > :not(summary) {
+	padding-left: 4ch;
+}
+details > :not(summary):not(:last-child)::after {
+	content: ",";
+}
+
+.object:not([open]) > summary:empty::before {
+	content: "Object";
+}
+.object:not([open]) > summary::after {
+	content: " { ... }";
+}
+.object:not([open]):not(:last-child) > summary::after {
+	content: " { ... },";
+}
+.object[open] > summary::after {
+	content: " {";
+}
+.object[open]::after {
+	content: "}";
+}
+.object[open]:not(:last-child)::after {
+	content: "},";
+}
+
+.array:not([open]) > summary:empty::before {
+	content: "Array";
+}
+.array:not([open]) > summary::after {
+	content: " [ ... ]";
+}
+.array:not([open]):not(:last-child) > summary::after {
+	content: " [ ... ],";
+}
+.array[open] > summary::after {
+	content: " [";
+}
+.array[open]::after {
+	content: "]";
+}
+.array[open]:not(:last-child)::after {
+	content: "],";
+}
+
+
+body {
+	background: black;
+	color: white;
+	font-family: monospace;
+}
+.undefined, .null {
+	color: grey;
+}
+.boolean, .number {
+	color: lime;
+}
+.string {
+	color: fuchsia;
+}
+.function {
+	color: aqua;
+}
