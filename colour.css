@@ -1,0 +1,16 @@
+body {
+	background: black;
+	color: white;
+}
+.undefined, .null {
+	color: grey;
+}
+.boolean, .number {
+	color: lime;
+}
+.string {
+	color: fuchsia;
+}
+.function {
+	color: aqua;
+}

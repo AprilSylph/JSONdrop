@@ -1,3 +1,6 @@
+body {
+	font-family: monospace;
+}
 details > * {
 	margin: 0;
 }
@@ -47,23 +50,4 @@ details:not([open])::after {
 }
 .array[open]:not(:last-child)::after {
 	content: "],";
-}
-
-
-body {
-	background: black;
-	color: white;
-	font-family: monospace;
-}
-.undefined, .null {
-	color: grey;
-}
-.boolean, .number {
-	color: lime;
-}
-.string {
-	color: fuchsia;
-}
-.function {
-	color: aqua;
 }
