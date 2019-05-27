@@ -1,3 +1,5 @@
+/* https://github.com/AprilSylph/JSONdrop */
+
 /**
  * Translates a key/value pair into HTML. Indirectly recursive.
  * @param {*} name - The key, if your value has one. Otherwise, anything falsy to render a keyless value.
@@ -50,6 +52,7 @@ function expand(values) {
 	Object.entries(values).forEach(([key, value]) => html += translate(key, value));
 	return html;
 }
+
 /**
  * Makes strings safe to display within browsers.
  * @param {string} value - The text to be escaped.
