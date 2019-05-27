@@ -5,7 +5,7 @@
  * @returns {string} Usable HTML representation of the provided JSON.
  */
 function translate(name, value) {
-	const nameOutput = (name ? `<span class="string">"${name}"</span>:` : "");
+	const nameOutput = (name ? `<span class="string">"${name}"</span>:` : "<span></span>");
 	switch(typeof(value)) {
 		case "undefined":
 		case "boolean":

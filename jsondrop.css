@@ -7,8 +7,11 @@ details > :not(summary) {
 details > :not(summary):not(:last-child)::after {
 	content: ",";
 }
+details:not([open])::after {
+	display: none;
+}
 
-.object:not([open]) > summary:empty::before {
+.object:not([open]) > summary span:empty::before {
 	content: "Object";
 }
 .object:not([open]) > summary::after {
@@ -27,7 +30,7 @@ details > :not(summary):not(:last-child)::after {
 	content: "},";
 }
 
-.array:not([open]) > summary:empty::before {
+.array:not([open]) > summary span:empty::before {
 	content: "Array";
 }
 .array:not([open]) > summary::after {
