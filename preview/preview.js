@@ -1,1 +1,1 @@
-const preview = value => document.body.innerHTML = translate("", value);
+const preview = value => document.body.innerHTML = render(value);

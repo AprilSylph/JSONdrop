@@ -1,13 +1,35 @@
 /* https://github.com/AprilSylph/JSONdrop */
 
+const defaultConfig = {
+	autoOpenDepth: 0,
+}
+
 /**
- * Translates a key/value pair into HTML. Indirectly recursive.
- * @param {*} name - The key, if your value has one. Otherwise, anything falsy to render a keyless value.
- * @param {*} value - The value to be rendered. Non-standard objects will only render their object type as a string.
+ * Renders a JavaScript object into a pretty HTML JSON-esque representation.
+ * @param {*} value - The value to be rendered. Non-standard objects will only render their object
+ *					  type as a string.
+ * @param {Object} [config] - The formatter configuration to use.
+ * @param {number} [config.autoOpenDepth] - automatically expand values up to this depth
  * @returns {string} Usable HTML representation of the provided JSON.
  */
-function translate(name, value) {
+const render = (value, config) => translate(null, value, Object.assign({}, defaultConfig, config));
+
+/**
+ * Translates a key/value pair into HTML. Co-recursive with `list` and `expand`
+ * @param {*} name - The key, if your value has one. Otherwise, anything falsy to render a keyless
+					 value.
+ * @param {*} value - The value to be rendered. Non-standard objects will only render their object
+ *					  type as a string.
+ * @param {Object} config - The formatter configuration to use.
+ * @param {number} config.autoOpenDepth - automatically expand values up to this depth
+ * @param {Object} [state] - The state of the formatter at a given call-site.
+ * @param {number} [state.depth] - the depth of the current value in the context of the full render
+ * @returns {string} Usable HTML representation of the provided JSON.
+ */
+function translate(name, value, config, {depth = 0} = {}) {
 	const nameOutput = (name ? `<span class="string">"${name}"</span>:` : "<span></span>");
+	const open = (depth < config.autoOpenDepth ? "open" : "");
+
 	switch(typeof(value)) {
 		case "undefined":
 		case "boolean":
@@ -20,9 +42,15 @@ function translate(name, value) {
 			if (value === null) {
 				return `<p>${nameOutput} <span class="null">${value}</span></p>`;
 			} else if (Array.isArray(value)) {
-				return `<details class="array"><summary>${nameOutput}</summary>${list(value)}</details>`;
+				return `<details ${open} class="array">
+							<summary>${nameOutput}</summary>
+							${list(value, config, {depth})}
+						</details>`;
 			} else if (value.toString() == "[object Object]") {
-				return `<details class="object"><summary>${nameOutput}</summary>${expand(value)}</details>`;
+				return `<details ${open} class="object">
+					<summary>${nameOutput}</summary>
+						${expand(value, config, {depth})}
+					</details>`;
 			} else {
 				return `<p>${nameOutput} <span class="string">"${value}"</span></p>`;
 			}
@@ -32,12 +60,14 @@ function translate(name, value) {
 /**
  * Cycles through an array to render each value.
  * @param {Object[]} values - An array to be rendered.
+ * @param {Object} [state] - The state of the formatter at a given call-site.
+ * @param {number} [state.depth] - the depth of the values in the context of the full render
  * @returns {string} Inner HTML representation of the provided array.
  */
-function list(values) {
+function list(values, config, {depth}) {
 	var html = "";
 	for (let x of values) {
-		html += translate("", x);
+		html += translate("", x, config, {depth: depth + 1});
 	}
 	return html;
 }
@@ -45,11 +75,13 @@ function list(values) {
 /**
  * Cycles through an object of key/value pairs to render each pair.
  * @param {Object} values - An object to be rendered.
+ * @param {Object} [state] - The state of the formatter at a given call-site.
+ * @param {number} [state.depth] - the depth of the values in the context of the full render
  * @returns {string} Inner HTML representation of the provided object.
  */
-function expand(values) {
+function expand(values, config, {depth}) {
 	var html = "";
-	Object.entries(values).forEach(([key, value]) => html += translate(key, value));
+	Object.entries(values).forEach(([key, value]) => html += translate(key, value, config, {depth: depth + 1}));
 	return html;
 }
 
