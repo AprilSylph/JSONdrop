@@ -2,6 +2,7 @@
 
 const defaultConfig = {
 	autoOpenDepth: 0,
+	customFormatter: () => {},
 }
 
 /**
@@ -10,6 +11,9 @@ const defaultConfig = {
  *					  type as a string.
  * @param {Object} [config] - The formatter configuration to use.
  * @param {number} [config.autoOpenDepth] - automatically expand values up to this depth
+ * @param {Function} [config.customFormatter] - each value will be passed to this function,
+ *												which can choose to override the default
+ *												formatting by returning a value
  * @returns {string} Usable HTML representation of the provided JSON.
  */
 const render = (value, config) => translate(null, value, Object.assign({}, defaultConfig, config));
@@ -22,6 +26,9 @@ const render = (value, config) => translate(null, value, Object.assign({}, defau
  *					  type as a string.
  * @param {Object} config - The formatter configuration to use.
  * @param {number} config.autoOpenDepth - automatically expand values up to this depth
+ * @param {Function} config.customFormatter - each value will be passed to this function,
+ *											  which can choose to override the default
+ *											  formatting by returning a value
  * @param {Object} [state] - The state of the formatter at a given call-site.
  * @param {number} [state.depth] - the depth of the current value in the context of the full render
  * @returns {string} Usable HTML representation of the provided JSON.
@@ -29,6 +36,11 @@ const render = (value, config) => translate(null, value, Object.assign({}, defau
 function translate(name, value, config, {depth = 0} = {}) {
 	const nameOutput = (name ? `<span class="string">"${name}"</span>:` : "<span></span>");
 	const open = (depth < config.autoOpenDepth ? "open" : "");
+	const customValue = config.customFormatter(value);
+
+	if (customValue) {
+		return `<p>${nameOutput} ${customValue}</p>`;
+	}
 
 	switch(typeof(value)) {
 		case "undefined":
