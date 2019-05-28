@@ -23,7 +23,7 @@ const render = (value, config) => translate(null, value, Object.assign({}, defau
  * @param {Object} config - The formatter configuration to use.
  * @param {number} config.autoOpenDepth - automatically expand values up to this depth
  * @param {Object} [state] - The state of the formatter at a given call-site.
- * @param {Object} [state.depth] - the depth of the current value in the context of the full render
+ * @param {number} [state.depth] - the depth of the current value in the context of the full render
  * @returns {string} Usable HTML representation of the provided JSON.
  */
 function translate(name, value, config, {depth = 0} = {}) {
@@ -60,6 +60,8 @@ function translate(name, value, config, {depth = 0} = {}) {
 /**
  * Cycles through an array to render each value.
  * @param {Object[]} values - An array to be rendered.
+ * @param {Object} [state] - The state of the formatter at a given call-site.
+ * @param {number} [state.depth] - the depth of the values in the context of the full render
  * @returns {string} Inner HTML representation of the provided array.
  */
 function list(values, config, {depth}) {
@@ -73,6 +75,8 @@ function list(values, config, {depth}) {
 /**
  * Cycles through an object of key/value pairs to render each pair.
  * @param {Object} values - An object to be rendered.
+ * @param {Object} [state] - The state of the formatter at a given call-site.
+ * @param {number} [state.depth] - the depth of the values in the context of the full render
  * @returns {string} Inner HTML representation of the provided object.
  */
 function expand(values, config, {depth}) {
