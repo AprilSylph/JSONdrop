@@ -60,7 +60,7 @@ function expand(values) {
  */
 function escapeText(value) {
 	return JSON.stringify(value
-		.replace(/&/g, "&amp;")
+		.replace(/&(?![#\w]+;)/g, "&amp;")
 		.replace(/</g, "&lt;")
 		.replace(/>/g, "&gt;")
 	);
