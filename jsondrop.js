@@ -8,8 +8,8 @@ const defaultConfig = {
  * Renders a JavaScript object into a pretty HTML JSON-esque representation.
  * @param {*} value - The value to be rendered. Non-standard objects will only render their object
  *					  type as a string.
- * @param {Object} config - The formatter configuration to use. Properties:
- *					  		autoOpenDepth: automatically expand values up to this depth
+ * @param {Object} [config] - The formatter configuration to use.
+ * @param {number} [config.autoOpenDepth] - automatically expand values up to this depth
  * @returns {string} Usable HTML representation of the provided JSON.
  */
 const render = (value, config) => translate(null, value, Object.assign({}, defaultConfig, config));
@@ -20,9 +20,10 @@ const render = (value, config) => translate(null, value, Object.assign({}, defau
 					 value.
  * @param {*} value - The value to be rendered. Non-standard objects will only render their object
  *					  type as a string.
- * @param {Object} config - The formatter configuration to use. Properties:
- *					  		autoOpenDepth: automatically expand values up to this depth
- * @param {Object} state - The state of the formatter at a given call-site. Has 1 property: depth.
+ * @param {Object} config - The formatter configuration to use.
+ * @param {number} config.autoOpenDepth - automatically expand values up to this depth
+ * @param {Object} [state] - The state of the formatter at a given call-site.
+ * @param {Object} [state.depth] - the depth of the current value in the context of the full render
  * @returns {string} Usable HTML representation of the provided JSON.
  */
 function translate(name, value, config, {depth = 0} = {}) {
