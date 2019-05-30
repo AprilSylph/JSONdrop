@@ -22,8 +22,14 @@ details:not([open])::after {
 .object:not([open]) > summary::after {
 	content: " { ... }";
 }
+.object:not([open]) > summary:last-child::after {
+	content: " { }";
+}
 .object:not([open]):not(:last-child) > summary::after {
 	content: " { ... },";
+}
+.object:not([open]):not(:last-child) > summary:last-child::after {
+	content: " { },";
 }
 .object[open] > summary::after {
 	content: " {";
@@ -41,8 +47,14 @@ details:not([open])::after {
 .array:not([open]) > summary::after {
 	content: " [ ... ]";
 }
+.array:not([open]) > summary:last-child::after {
+	content: " [ ]";
+}
 .array:not([open]):not(:last-child) > summary::after {
 	content: " [ ... ],";
+}
+.array:not([open]):not(:last-child) > summary:last-child::after {
+	content: " [ ],";
 }
 .array[open] > summary::after {
 	content: " [";
