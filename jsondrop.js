@@ -1,111 +1,102 @@
 /* https://github.com/AprilSylph/JSONdrop */
 
 const defaultConfig = {
-	autoOpenDepth: 0,
-	customFormatter: () => {},
+  autoOpenDepth: 1
+};
+
+const getValueFromKDS = (obj, keyDotString) => {
+  let path = keyDotString.split(".");
+  path.forEach(key => obj = obj[key]);
+  return obj;
+};
+
+const escapeHTML = string => {
+  const p = Object.assign(document.createElement("p"), {
+    innerText: string
+  });
+
+  return p.innerHTML;
 }
 
-/**
- * Renders a JavaScript object into a pretty HTML JSON-esque representation.
- * @param {*} value - The value to be rendered. Non-standard objects will only render their object
- *					  type as a string.
- * @param {Object} [config] - The formatter configuration to use.
- * @param {number} [config.autoOpenDepth] - automatically expand values up to this depth
- * @param {Function} [config.customFormatter] - each value will be passed to this function,
- *												which can choose to override the default
- *												formatting by returning a value
- * @returns {string} Usable HTML representation of the provided JSON.
- */
-const render = (value, config) => translate(null, value, Object.assign({}, defaultConfig, config));
+const translate = (name, value, keyDotString, isOpen) => {
+  const isArray = Array.isArray(value);
+  const isArrayValue = isNaN(parseInt(name)) === false;
+  const id = keyDotString ? `id="${keyDotString}"` : 'data-jsondrop-root';
+  const open = isOpen ? `open` : '';
 
-/**
- * Translates a key/value pair into HTML. Co-recursive with `list` and `expand`
- * @param {*} name - The key, if your value has one. Otherwise, anything falsy to render a keyless
-					 value.
- * @param {*} value - The value to be rendered. Non-standard objects will only render their object
- *					  type as a string.
- * @param {Object} config - The formatter configuration to use.
- * @param {number} config.autoOpenDepth - automatically expand values up to this depth
- * @param {Function} config.customFormatter - each value will be passed to this function,
- *											  which can choose to override the default
- *											  formatting by returning a value
- * @param {Object} [state] - The state of the formatter at a given call-site.
- * @param {number} [state.depth] - the depth of the current value in the context of the full render
- * @returns {string} Usable HTML representation of the provided JSON.
- */
-function translate(name, value, config, {depth = 0} = {}) {
-	const nameOutput = (name ? `<span class="string">"${name}"</span>:` : "<span></span>");
-	const open = (depth < config.autoOpenDepth ? "open" : "");
-	const customValue = config.customFormatter(value);
+	let nameOutput = '<span></span>';
+  if (name) {
+    nameOutput = isArrayValue ?
+      `<span class="number">${name}</span>:` :
+      `<span class="string">"${name}"</span>:`;
+  }
 
-	if (customValue) {
-		return `<p>${nameOutput} ${customValue}</p>`;
-	}
+  switch(typeof(value)) {
+    case 'undefined':
+    case 'boolean':
+    case 'number':
+    case 'string':
+    case 'function':
+      return `<p>${nameOutput} <span class="${typeof(value)}">${escapeHTML(JSON.stringify(value))}</span></p>`;
+    case 'object':
+      if (value === null) {
+        return `<p>${nameOutput} <span class="null">${value}</span></p>`;
+      }
 
-	switch(typeof(value)) {
-		case "undefined":
-		case "boolean":
-		case "number":
-		case "function":
-			return `<p>${nameOutput} <span class="${typeof(value)}">${value}</span></p>`;
-		case "string":
-			return `<p>${nameOutput} <span class="string">${escapeText(value)}</span></p>`;
-		case "object":
-			if (value === null) {
-				return `<p>${nameOutput} <span class="null">${value}</span></p>`;
-			} else if (Array.isArray(value)) {
-				return `<details ${open} class="array">
-							<summary>${nameOutput}</summary>
-							${list(value, config, {depth})}
-						</details>`;
-			} else if (value.toString() == "[object Object]") {
-				return `<details ${open} class="object">
-					<summary>${nameOutput}</summary>
-						${expand(value, config, {depth})}
-					</details>`;
-			} else {
-				return `<p>${nameOutput} <span class="string">"${value}"</span></p>`;
-			}
-	}
-}
+      if (isArray || value === Object(value)) {
+        return `
+          <details ${id} class="${isArray ? 'array' : 'object'}" ${open}>
+            <summary>${nameOutput}</summary>
+          </details>`;
+      }
 
-/**
- * Cycles through an array to render each value.
- * @param {Object[]} values - An array to be rendered.
- * @param {Object} [state] - The state of the formatter at a given call-site.
- * @param {number} [state.depth] - the depth of the values in the context of the full render
- * @returns {string} Inner HTML representation of the provided array.
- */
-function list(values, config, {depth}) {
-	var html = "";
-	for (let x of values) {
-		html += translate("", x, config, {depth: depth + 1});
-	}
-	return html;
-}
+      return `
+        <details class="object" ${open}>
+          <summary>${nameOutput}</summary>
+          <p>${JSON.stringify(value)}</p>
+        </details>`;
+  }
+};
 
-/**
- * Cycles through an object of key/value pairs to render each pair.
- * @param {Object} values - An object to be rendered.
- * @param {Object} [state] - The state of the formatter at a given call-site.
- * @param {number} [state.depth] - the depth of the values in the context of the full render
- * @returns {string} Inner HTML representation of the provided object.
- */
-function expand(values, config, {depth}) {
-	var html = "";
-	Object.entries(values).forEach(([key, value]) => html += translate(key, value, config, {depth: depth + 1}));
-	return html;
-}
+const convert = (obj, config = {}) => {
+  try {
+    JSON.stringify(obj);
+    Object.freeze(obj);
+  } catch (error) {
+    return error;
+  }
 
-/**
- * Makes strings safe to display within browsers.
- * @param {string} value - The text to be escaped.
- * @returns {string} The same text, displayable on a web page.
- */
-function escapeText(value) {
-	return JSON.stringify(value
-		.replace(/&(?![#\w]+;)/g, "&amp;")
-		.replace(/</g, "&lt;")
-		.replace(/>/g, "&gt;")
-	);
-}
+  const options = Object.assign({}, defaultConfig, config);
+  let keyList = Object.keys(obj);
+  let depth = 0;
+  let elementObject = Object.assign(document.createElement("code"), {
+    innerHTML: translate(null, obj, false, depth < options.autoOpenDepth)
+  });
+
+  do {
+    depth++;
+
+    let newKeyList = [];
+    let autoOpen = depth < options.autoOpenDepth;
+
+    keyList.forEach(key => {
+      const item = getValueFromKDS(obj, key);
+
+      if (item === Object(item)) {
+        newKeyList = newKeyList.concat(Object.keys(item).map(x => `${key}.${x}`));
+      }
+
+      const keyArray = key.split('.');
+      const valueName = keyArray.pop();
+      const targetKey = keyArray.join('.');
+      const selector = targetKey ? `[id="${targetKey}"]` : `[data-jsondrop-root]`;
+      const target = elementObject.querySelector(selector);
+
+      target.innerHTML += translate(valueName, item, key, autoOpen);
+    });
+
+    keyList = newKeyList;
+  } while (keyList.length !== 0);
+
+  return elementObject;
+};

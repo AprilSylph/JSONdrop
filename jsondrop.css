@@ -1,8 +1,5 @@
 /* https://github.com/AprilSylph/JSONdrop */
 
-body {
-	font-family: monospace;
-}
 details > * {
 	margin: 0;
 }
