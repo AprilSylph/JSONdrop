@@ -23,13 +23,7 @@ const translate = (name, value, keyDotString, isOpen) => {
   const isArrayValue = isNaN(parseInt(name)) === false;
   const id = keyDotString ? `id="${keyDotString}"` : 'data-jsondrop-root';
   const open = isOpen ? 'open' : '';
-
-  let nameOutput = '<span></span>';
-  if (name) {
-    nameOutput = isArrayValue ?
-      `<span class="number">${name}</span>:` :
-      `<span class="string">"${name}"</span>:`;
-  }
+  const nameOutput = (name && !isArrayValue) ? `<span class="string">"${name}"</span>:` : '<span></span>';
 
   switch (typeof(value)) {
   case 'undefined':
@@ -62,7 +56,6 @@ const translate = (name, value, keyDotString, isOpen) => {
 const convert = (obj, config = {}) => {
   try {
     JSON.stringify(obj);
-    Object.entries(obj);
     Object.freeze(obj);
   } catch (error) {
     console.error(error);
@@ -70,13 +63,18 @@ const convert = (obj, config = {}) => {
     obj[error.name] = error.message;
   }
 
-  const options = Object.assign({}, defaultConfig, config);
-  let keyList = Object.keys(obj);
   let depth = 0;
+  const options = Object.assign({}, defaultConfig, config);
   const elementObject = Object.assign(document.createElement('code'), {
     className: 'jsondrop',
     innerHTML: translate(null, obj, false, depth < options.autoOpenDepth),
   });
+
+  if (obj !== Object(obj)) {
+    return elementObject;
+  }
+
+  let keyList = Object.keys(obj);
 
   do {
     depth++;
