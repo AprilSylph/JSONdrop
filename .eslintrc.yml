@@ -5,9 +5,8 @@ env:
 extends: 'eslint:recommended'
 parserOptions:
   ecmaVersion: 2018
-  sourceType: module
 rules:
-  indent: [error, 2]
+  indent: [error, 2, {SwitchCase: 1}]
   quotes: [error, single, {avoidEscape: true}]
   linebreak-style: [error, unix]
   semi: [error, always]
@@ -51,5 +50,3 @@ rules:
   space-infix-ops: [error]
   template-curly-spacing: [error]
   quote-props: [error, as-needed, {keywords: false}]
-globals:
-  browser: true

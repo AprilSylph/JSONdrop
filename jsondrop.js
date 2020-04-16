@@ -26,25 +26,25 @@ const translate = (name, value, keyDotString, isOpen) => {
   const nameOutput = (name && !isArrayValue) ? `<span class="string">"${name}"</span>:` : '<span></span>';
 
   switch (typeof(value)) {
-  case 'undefined':
-  case 'boolean':
-  case 'number':
-  case 'string':
-  case 'function':
-    return `<p>${nameOutput} <span class="${typeof(value)}">${escapeHTML(JSON.stringify(value))}</span></p>`;
-  case 'object':
-    if (value === null) {
-      return `<p>${nameOutput} <span class="null">${value}</span></p>`;
-    }
+    case 'undefined':
+    case 'boolean':
+    case 'number':
+    case 'string':
+    case 'function':
+      return `<p>${nameOutput} <span class="${typeof(value)}">${escapeHTML(JSON.stringify(value))}</span></p>`;
+    case 'object':
+      if (value === null) {
+        return `<p>${nameOutput} <span class="null">${value}</span></p>`;
+      }
 
-    if (isArray || value === Object(value)) {
-      return `
+      if (isArray || value === Object(value)) {
+        return `
           <details ${id} class="${isArray ? 'array' : 'object'}" ${open}>
             <summary>${nameOutput}</summary>
           </details>`;
-    }
+      }
 
-    return `
+      return `
         <details class="object" ${open}>
           <summary>${nameOutput}</summary>
           <p>${JSON.stringify(value)}</p>
