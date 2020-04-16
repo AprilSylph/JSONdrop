@@ -1,5 +1,8 @@
 /* globals convert */
-const preview = (value, config) => document.body.appendChild(convert(value, config));
+const preview = (value, config) => {
+  document.body.innerHTML = '';
+  document.body.appendChild(convert(value, config));
+};
 
 window.addEventListener('load', () => {
   try {
