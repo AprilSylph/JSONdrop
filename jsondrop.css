@@ -1,66 +1,66 @@
 /* https://github.com/AprilSylph/JSONdrop */
 
 .jsondrop details > * {
-	margin: 0;
+  margin: 0;
 }
 .jsondrop details > :not(summary) {
-	padding-left: 4ch;
+  padding-left: 4ch;
 }
 .jsondrop details > :not(summary):not(:last-child)::after {
-	content: ",";
+  content: ",";
 }
 .jsondrop details:not([open])::after {
-	display: none;
+  display: none;
 }
 
 .jsondrop .object:not([open]) > summary span:empty::before {
-	content: "Object";
+  content: "Object";
 }
 .jsondrop .object:not([open]) > summary::after {
-	content: " { ... }";
+  content: " { ... }";
 }
 .jsondrop .object:not([open]) > summary:last-child::after {
-	content: " { }";
+  content: " { }";
 }
 .jsondrop .object:not([open]):not(:last-child) > summary::after {
-	content: " { ... },";
+  content: " { ... },";
 }
 .jsondrop .object:not([open]):not(:last-child) > summary:last-child::after {
-	content: " { },";
+  content: " { },";
 }
 .jsondrop .object[open] > summary::after {
-	content: " {";
+  content: " {";
 }
 .jsondrop .object[open]::after {
-	content: "}";
+  content: "}";
 }
 .jsondrop .object[open]:not(:last-child)::after {
-	content: "},";
+  content: "},";
 }
 
 .jsondrop .array:not([open]) > summary span:empty::before {
-	content: "Array";
+  content: "Array";
 }
 .jsondrop .array:not([open]) > summary::after {
-	content: " [ ... ]";
+  content: " [ ... ]";
 }
 .jsondrop .array:not([open]) > summary:last-child::after {
-	content: " [ ]";
+  content: " [ ]";
 }
 .jsondrop .array:not([open]):not(:last-child) > summary::after {
-	content: " [ ... ],";
+  content: " [ ... ],";
 }
 .jsondrop .array:not([open]):not(:last-child) > summary:last-child::after {
-	content: " [ ],";
+  content: " [ ],";
 }
 .jsondrop .array[open] > summary::after {
-	content: " [";
+  content: " [";
 }
 .jsondrop .array[open]::after {
-	content: "]";
+  content: "]";
 }
 .jsondrop .array[open]:not(:last-child)::after {
-	content: "],";
+  content: "],";
 }
 
 .jsondrop {
@@ -72,17 +72,17 @@
   color: var(--jsondrop-undefined, grey);
 }
 .jsondrop .null {
-	color: var(--jsondrop-null, grey);
+  color: var(--jsondrop-null, grey);
 }
 .jsondrop .boolean {
   color: var(--jsondrop-boolean, lime);
 }
 .jsondrop .number {
-	color: var(--jsondrop-number, lime);
+  color: var(--jsondrop-number, lime);
 }
 .jsondrop .string {
-	color: var(--jsondrop-string, fuchsia);
+  color: var(--jsondrop-string, fuchsia);
 }
 .jsondrop .function {
-	color: var(--jsondrop-function, aqua);
+  color: var(--jsondrop-function, aqua);
 }
