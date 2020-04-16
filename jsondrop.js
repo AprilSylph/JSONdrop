@@ -62,9 +62,12 @@ const translate = (name, value, keyDotString, isOpen) => {
 const convert = (obj, config = {}) => {
   try {
     JSON.stringify(obj);
+    Object.entries(obj);
     Object.freeze(obj);
   } catch (error) {
-    return error;
+    console.error(error);
+    obj = {};
+    obj[error.name] = error.message;
   }
 
   const options = Object.assign({}, defaultConfig, config);
