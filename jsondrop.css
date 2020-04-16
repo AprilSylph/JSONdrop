@@ -1,64 +1,88 @@
 /* https://github.com/AprilSylph/JSONdrop */
 
-details > * {
+.jsondrop details > * {
 	margin: 0;
 }
-details > :not(summary) {
+.jsondrop details > :not(summary) {
 	padding-left: 4ch;
 }
-details > :not(summary):not(:last-child)::after {
+.jsondrop details > :not(summary):not(:last-child)::after {
 	content: ",";
 }
-details:not([open])::after {
+.jsondrop details:not([open])::after {
 	display: none;
 }
 
-.object:not([open]) > summary span:empty::before {
+.jsondrop .object:not([open]) > summary span:empty::before {
 	content: "Object";
 }
-.object:not([open]) > summary::after {
+.jsondrop .object:not([open]) > summary::after {
 	content: " { ... }";
 }
-.object:not([open]) > summary:last-child::after {
+.jsondrop .object:not([open]) > summary:last-child::after {
 	content: " { }";
 }
-.object:not([open]):not(:last-child) > summary::after {
+.jsondrop .object:not([open]):not(:last-child) > summary::after {
 	content: " { ... },";
 }
-.object:not([open]):not(:last-child) > summary:last-child::after {
+.jsondrop .object:not([open]):not(:last-child) > summary:last-child::after {
 	content: " { },";
 }
-.object[open] > summary::after {
+.jsondrop .object[open] > summary::after {
 	content: " {";
 }
-.object[open]::after {
+.jsondrop .object[open]::after {
 	content: "}";
 }
-.object[open]:not(:last-child)::after {
+.jsondrop .object[open]:not(:last-child)::after {
 	content: "},";
 }
 
-.array:not([open]) > summary span:empty::before {
+.jsondrop .array:not([open]) > summary span:empty::before {
 	content: "Array";
 }
-.array:not([open]) > summary::after {
+.jsondrop .array:not([open]) > summary::after {
 	content: " [ ... ]";
 }
-.array:not([open]) > summary:last-child::after {
+.jsondrop .array:not([open]) > summary:last-child::after {
 	content: " [ ]";
 }
-.array:not([open]):not(:last-child) > summary::after {
+.jsondrop .array:not([open]):not(:last-child) > summary::after {
 	content: " [ ... ],";
 }
-.array:not([open]):not(:last-child) > summary:last-child::after {
+.jsondrop .array:not([open]):not(:last-child) > summary:last-child::after {
 	content: " [ ],";
 }
-.array[open] > summary::after {
+.jsondrop .array[open] > summary::after {
 	content: " [";
 }
-.array[open]::after {
+.jsondrop .array[open]::after {
 	content: "]";
 }
-.array[open]:not(:last-child)::after {
+.jsondrop .array[open]:not(:last-child)::after {
 	content: "],";
+}
+
+.jsondrop {
+  display: block;
+  background-color: var(--jsondrop-background, black);
+  color: var(--jsondrop-text, white);
+}
+.jsondrop .undefined {
+  color: var(--jsondrop-undefined, grey);
+}
+.jsondrop .null {
+	color: var(--jsondrop-null, grey);
+}
+.jsondrop .boolean {
+  color: var(--jsondrop-boolean, lime);
+}
+.jsondrop .number {
+	color: var(--jsondrop-number, lime);
+}
+.jsondrop .string {
+	color: var(--jsondrop-string, fuchsia);
+}
+.jsondrop .function {
+	color: var(--jsondrop-function, aqua);
 }

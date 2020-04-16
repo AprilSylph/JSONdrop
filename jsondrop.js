@@ -74,6 +74,7 @@ const convert = (obj, config = {}) => {
   let keyList = Object.keys(obj);
   let depth = 0;
   const elementObject = Object.assign(document.createElement('code'), {
+    className: 'jsondrop',
     innerHTML: translate(null, obj, false, depth < options.autoOpenDepth),
   });
 
