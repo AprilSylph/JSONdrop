@@ -30,8 +30,9 @@ const translate = (name, value, keyDotString, isOpen) => {
     case 'boolean':
     case 'number':
     case 'string':
-    case 'function':
       return `<p>${nameOutput} <span class="${typeof(value)}">${escapeHTML(JSON.stringify(value))}</span></p>`;
+    case 'function':
+      return `<p>${nameOutput} <span class="function">${escapeHTML(value.toString())}</span></p>`;
     case 'object':
       if (value === null) {
         return `<p>${nameOutput} <span class="null">${value}</span></p>`;
