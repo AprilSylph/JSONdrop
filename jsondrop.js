@@ -1,7 +1,7 @@
 /* https://github.com/AprilSylph/JSONdrop */
 
 const defaultConfig = {
-  autoOpenDepth: 1,
+  autoOpenDepth: 0,
 };
 
 const getValueFromKDS = (obj, keyDotString) => {
