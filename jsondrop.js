@@ -20,7 +20,7 @@ const escapeHTML = string => {
 
 const translate = (name, value, keyDotString, isOpen) => {
   const isArray = Array.isArray(value);
-  const isArrayValue = name == parseInt(name);
+  const isArrayValue = name == parseInt(name); // eslint-disable-line eqeqeq
   const id = keyDotString ? `id="${keyDotString}"` : 'data-jsondrop-root';
   const open = isOpen ? 'open' : '';
   const nameOutput = (name && !isArrayValue) ? `<span class="string">"${name}"</span>:` : '<span></span>';
