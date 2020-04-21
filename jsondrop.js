@@ -20,7 +20,7 @@ const escapeHTML = string => {
 
 const translate = (name, value, keyDotString, isOpen) => {
   const isArray = Array.isArray(value);
-  const isArrayValue = isNaN(parseInt(name)) === false;
+  const isArrayValue = name == parseInt(name);
   const id = keyDotString ? `id="${keyDotString}"` : 'data-jsondrop-root';
   const open = isOpen ? 'open' : '';
   const nameOutput = (name && !isArrayValue) ? `<span class="string">"${name}"</span>:` : '<span></span>';

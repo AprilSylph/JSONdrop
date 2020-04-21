@@ -1,6 +1,6 @@
 {
   "name": "JSONdrop",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Javascript Object to HTML5 pretty-print converter",
   "main": "jsondrop.js",
   "scripts": {
