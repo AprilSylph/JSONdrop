@@ -10,20 +10,17 @@ const getValueFromKDS = (obj, keyDotString) => {
   return obj;
 };
 
-const escapeHTML = string => {
-  const p = Object.assign(document.createElement('p'), {
-    innerText: string,
-  });
-
-  return p.innerHTML;
-};
+const escapeHTML = string => Object.assign(
+  document.createElement('p'),
+  { innerText: string },
+).innerHTML;
 
 const translate = (name, value, keyDotString, isOpen) => {
   const isArray = Array.isArray(value);
   const isArrayValue = name == parseInt(name); // eslint-disable-line eqeqeq
   const id = keyDotString ? `id="${keyDotString}"` : 'data-jsondrop-root';
   const open = isOpen ? 'open' : '';
-  const nameOutput = (name && !isArrayValue) ? `<span class="string">"${name}"</span>:` : '<span></span>';
+  const nameOutput = (name && !isArrayValue) ? `<span class="string">"${escapeHTML(name)}"</span>:` : '<span></span>';
 
   switch (typeof(value)) {
     case 'undefined':
