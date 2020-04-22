@@ -12,6 +12,8 @@ window.addEventListener('load', () => {
       preview(JSON.parse(object), JSON.parse(params.get('config')));
     }
   } catch (error) {
-    preview({error: error.toString()}, {autoOpenDepth: 1});
+    const object = {};
+    object[error.name] = error.message;
+    preview(object, {autoOpenDepth: 1});
   }
 });
