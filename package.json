@@ -1,24 +1,9 @@
 {
-  "name": "JSONdrop",
-  "version": "2.0.2",
-  "description": "Javascript Object to HTML5 pretty-print converter",
-  "main": "jsondrop.js",
+  "license": "GPL-3.0",
+  "repository": "github:AprilSylph/JSONdrop",
   "scripts": {
     "test": "eslint ./"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/AprilSylph/JSONdrop.git"
-  },
-  "keywords": [
-    "JSON"
-  ],
-  "author": "April Sylph",
-  "license": "GPL-3.0",
-  "bugs": {
-    "url": "https://github.com/AprilSylph/JSONdrop/issues"
-  },
-  "homepage": "https://github.com/AprilSylph/JSONdrop#readme",
   "devDependencies": {
     "eslint": "^6.8.0",
     "minify": "^5.1.1"
