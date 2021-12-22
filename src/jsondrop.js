@@ -8,10 +8,7 @@ const getValueFromKDS = (obj, keyDotString) => {
   return obj;
 };
 
-const escapeHTML = string => Object.assign(
-  document.createElement('p'),
-  { innerText: string }
-).innerHTML;
+const escapeHTML = textContent => Object.assign(document.createElement('p'), { textContent }).innerHTML;
 
 const translate = (name, value, keyDotString, isOpen) => {
   const isArray = Array.isArray(value);
