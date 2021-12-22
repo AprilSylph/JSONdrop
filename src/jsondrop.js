@@ -1,5 +1,3 @@
-/* https://github.com/AprilSylph/JSONdrop */
-
 const defaultConfig = {
   autoOpenDepth: 0
 };
@@ -50,8 +48,7 @@ const translate = (name, value, keyDotString, isOpen) => {
   }
 };
 
-// eslint-disable-next-line no-unused-vars
-const convert = (obj, config = {}) => {
+export default (obj, config = {}) => {
   try {
     JSON.stringify(obj);
     Object.freeze(obj);
