@@ -14,6 +14,6 @@ window.addEventListener('load', () => {
   } catch (error) {
     const object = {};
     object[error.name] = error.message;
-    preview(object, {autoOpenDepth: 1});
+    preview(object, { autoOpenDepth: 1 });
   }
 });

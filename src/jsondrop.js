@@ -1,18 +1,18 @@
 /* https://github.com/AprilSylph/JSONdrop */
 
 const defaultConfig = {
-  autoOpenDepth: 0,
+  autoOpenDepth: 0
 };
 
 const getValueFromKDS = (obj, keyDotString) => {
   const path = keyDotString.split('.');
-  path.forEach(key => obj = obj[key]);
+  path.forEach(key => { obj = obj[key]; });
   return obj;
 };
 
 const escapeHTML = string => Object.assign(
   document.createElement('p'),
-  { innerText: string },
+  { innerText: string }
 ).innerHTML;
 
 const translate = (name, value, keyDotString, isOpen) => {
@@ -22,12 +22,12 @@ const translate = (name, value, keyDotString, isOpen) => {
   const open = isOpen ? 'open' : '';
   const nameOutput = (name && !isArrayValue) ? `<span class="string">"${escapeHTML(name)}"</span>:` : '<span></span>';
 
-  switch (typeof(value)) {
+  switch (typeof (value)) {
     case 'undefined':
     case 'boolean':
     case 'number':
     case 'string':
-      return `<p>${nameOutput} <span class="${typeof(value)}">${escapeHTML(JSON.stringify(value))}</span></p>`;
+      return `<p>${nameOutput} <span class="${typeof (value)}">${escapeHTML(JSON.stringify(value))}</span></p>`;
     case 'function':
       return `<p>${nameOutput} <span class="function">${escapeHTML(value.toString())}</span></p>`;
     case 'object':
@@ -65,7 +65,7 @@ const convert = (obj, config = {}) => {
   const options = Object.assign({}, defaultConfig, config);
   const elementObject = Object.assign(document.createElement('code'), {
     className: 'jsondrop',
-    innerHTML: translate(null, obj, false, depth < options.autoOpenDepth),
+    innerHTML: translate(null, obj, false, depth < options.autoOpenDepth)
   });
 
   if (obj !== Object(obj)) {
