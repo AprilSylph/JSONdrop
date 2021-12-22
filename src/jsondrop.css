@@ -1,10 +1,23 @@
-/* https://github.com/AprilSylph/JSONdrop */
+.jsondrop {
+  display: block;
+  background-color: var(--jsondrop-background, black);
+  color: var(--jsondrop-text, white);
+}
+
+.jsondrop a {
+  color: inherit;
+  text-decoration: none;
+}
+.jsondrop a:hover,
+.jsondrop a:focus {
+  text-decoration: underline;
+}
 
 .jsondrop details > * {
   margin: 0;
 }
 .jsondrop details > :not(summary) {
-  padding-left: 4ch;
+  padding-left: var(--jsondrop-indent, 4ch);
 }
 .jsondrop details > :not(summary):not(:last-child)::after {
   content: ",";
@@ -13,76 +26,71 @@
   display: none;
 }
 
-.jsondrop .object:not([open]) > summary span:empty::before {
+.jsondrop [data-jsondrop-type="object"]:not([open]) > summary span:empty::before {
   content: "Object";
 }
-.jsondrop .object:not([open]) > summary::after {
+.jsondrop [data-jsondrop-type="object"]:not([open]) > summary::after {
   content: " { ... }";
 }
-.jsondrop .object:not([open]) > summary:last-child::after {
+.jsondrop [data-jsondrop-type="object"]:not([open]) > summary:last-child::after {
   content: " { }";
 }
-.jsondrop .object:not([open]):not(:last-child) > summary::after {
+.jsondrop [data-jsondrop-type="object"]:not([open]):not(:last-child) > summary::after {
   content: " { ... },";
 }
-.jsondrop .object:not([open]):not(:last-child) > summary:last-child::after {
+.jsondrop [data-jsondrop-type="object"]:not([open]):not(:last-child) > summary:last-child::after {
   content: " { },";
 }
-.jsondrop .object[open] > summary::after {
+.jsondrop [data-jsondrop-type="object"][open] > summary::after {
   content: " {";
 }
-.jsondrop .object[open]::after {
+.jsondrop [data-jsondrop-type="object"][open]::after {
   content: "}";
 }
-.jsondrop .object[open]:not(:last-child)::after {
+.jsondrop [data-jsondrop-type="object"][open]:not(:last-child)::after {
   content: "},";
 }
 
-.jsondrop .array:not([open]) > summary span:empty::before {
+.jsondrop [data-jsondrop-type="array"]:not([open]) > summary span:empty::before {
   content: "Array";
 }
-.jsondrop .array:not([open]) > summary::after {
+.jsondrop [data-jsondrop-type="array"]:not([open]) > summary::after {
   content: " [ ... ]";
 }
-.jsondrop .array:not([open]) > summary:last-child::after {
+.jsondrop [data-jsondrop-type="array"]:not([open]) > summary:last-child::after {
   content: " [ ]";
 }
-.jsondrop .array:not([open]):not(:last-child) > summary::after {
+.jsondrop [data-jsondrop-type="array"]:not([open]):not(:last-child) > summary::after {
   content: " [ ... ],";
 }
-.jsondrop .array:not([open]):not(:last-child) > summary:last-child::after {
+.jsondrop [data-jsondrop-type="array"]:not([open]):not(:last-child) > summary:last-child::after {
   content: " [ ],";
 }
-.jsondrop .array[open] > summary::after {
+.jsondrop [data-jsondrop-type="array"][open] > summary::after {
   content: " [";
 }
-.jsondrop .array[open]::after {
+.jsondrop [data-jsondrop-type="array"][open]::after {
   content: "]";
 }
-.jsondrop .array[open]:not(:last-child)::after {
+.jsondrop [data-jsondrop-type="array"][open]:not(:last-child)::after {
   content: "],";
 }
 
-.jsondrop {
-  display: block;
-  background-color: var(--jsondrop-background, black);
-  color: var(--jsondrop-text, white);
-}
-.jsondrop .undefined {
+.jsondrop [data-jsondrop-type="undefined"] {
   color: var(--jsondrop-undefined, grey);
 }
-.jsondrop .null {
+.jsondrop [data-jsondrop-type="null"] {
   color: var(--jsondrop-null, grey);
 }
-.jsondrop .boolean {
+.jsondrop [data-jsondrop-type="boolean"] {
   color: var(--jsondrop-boolean, lime);
 }
-.jsondrop .number {
+.jsondrop [data-jsondrop-type="number"] {
   color: var(--jsondrop-number, lime);
 }
-.jsondrop .string {
+.jsondrop [data-jsondrop-type="string"] {
   color: var(--jsondrop-string, fuchsia);
 }
-.jsondrop .function {
+.jsondrop [data-jsondrop-type="function"] {
   color: var(--jsondrop-function, aqua);
 }

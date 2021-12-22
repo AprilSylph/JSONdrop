@@ -2,96 +2,116 @@ const defaultConfig = {
   autoOpenDepth: 0
 };
 
-const getValueFromKDS = (obj, keyDotString) => {
-  const path = keyDotString.split('.');
-  path.forEach(key => { obj = obj[key]; });
-  return obj;
-};
-
-const escapeHTML = textContent => Object.assign(document.createElement('p'), { textContent }).innerHTML;
-
-const translate = (name, value, keyDotString, isOpen) => {
-  const isArray = Array.isArray(value);
-  const isArrayValue = name == parseInt(name); // eslint-disable-line eqeqeq
-  const id = keyDotString ? `id="${keyDotString}"` : 'data-jsondrop-root';
-  const open = isOpen ? 'open' : '';
-  const nameOutput = (name && !isArrayValue) ? `<span class="string">"${escapeHTML(name)}"</span>:` : '<span></span>';
-
-  switch (typeof (value)) {
-    case 'undefined':
-    case 'boolean':
-    case 'number':
-    case 'string':
-      return `<p>${nameOutput} <span class="${typeof (value)}">${escapeHTML(JSON.stringify(value))}</span></p>`;
-    case 'function':
-      return `<p>${nameOutput} <span class="function">${escapeHTML(value.toString())}</span></p>`;
-    case 'object':
-      if (value === null) {
-        return `<p>${nameOutput} <span class="null">${value}</span></p>`;
-      }
-
-      if (isArray || value === Object(value)) {
-        return `
-          <details ${id} class="${isArray ? 'array' : 'object'}" ${open}>
-            <summary>${nameOutput}</summary>
-          </details>`;
-      }
-
-      return `
-        <details class="object" ${open}>
-          <summary>${nameOutput}</summary>
-          <p>${JSON.stringify(value)}</p>
-        </details>`;
+/**
+ * Test if a string is a URL
+ *
+ * @param {string} string - String to test
+ * @returns {boolean} True if the string is a valid, absolute URL
+ */
+const isUrl = string => {
+  try {
+    return new URL(string) instanceof URL;
+  } catch {
+    return false;
   }
 };
 
+/**
+ * @param {Array} entry
+ * @param {string} [entry.key] - Entry key
+ * @param {*} entry.value - Entry value
+ * @param {boolean} open - If this object or array should display expanded
+ * @returns {HTMLParagraphElement|HTMLDetailsElement} The rendered entry
+ */
+const renderEntry = ([key, value], open) => {
+  const paragraph = document.createElement('p');
+
+  if (typeof key === 'string') {
+    const keySpan = Object.assign(document.createElement('span'), { textContent: JSON.stringify(key) });
+    keySpan.dataset.jsondropType = 'string';
+    paragraph.append(keySpan, ': ');
+  }
+
+  switch (typeof value) {
+    case 'function': {
+      const valueSpan = Object.assign(document.createElement('span'), { textContent: value.toString() });
+      valueSpan.dataset.jsondropType = 'function';
+      paragraph.append(valueSpan);
+      break;
+    }
+    case 'object': {
+      if (value === null) {
+        const valueSpan = Object.assign(document.createElement('span'), { textContent: JSON.stringify(value) });
+        valueSpan.dataset.jsondropType = 'null';
+        paragraph.append(valueSpan);
+        break;
+      }
+
+      const details = Object.assign(document.createElement('details'), { open });
+      details.dataset.jsondropType = Array.isArray(value) ? 'array' : 'object';
+
+      const summary = Object.assign(document.createElement('summary'));
+      summary.append(...paragraph.childNodes);
+      details.append(summary);
+
+      return details;
+    }
+    default: {
+      const valueSpan = Object.assign(document.createElement('span'), { textContent: JSON.stringify(value) });
+      valueSpan.dataset.jsondropType = typeof value;
+      paragraph.append(valueSpan);
+
+      if (isUrl(value)) {
+        const anchor = Object.assign(document.createElement('a'), { href: value, target: '_blank' });
+        anchor.append(...valueSpan.childNodes);
+        valueSpan.append(anchor);
+      }
+    }
+  }
+
+  return paragraph;
+};
+
+/**
+ * @param {*} obj - Object to render
+ * @param {object} [config] - Configuration options
+ * @param {number} [config.autoOpenDepth] - How deep to auto-expand objects (default: 0)
+ * @returns {HTMLElement} A <code> element containing an interactive pretty-printed display of the input object
+ */
 export default (obj, config = {}) => {
   try {
     JSON.stringify(obj);
     Object.freeze(obj);
   } catch (error) {
     console.error(error);
-    obj = {};
-    obj[error.name] = error.message;
+    obj = { [error.name]: error.message };
   }
 
-  let depth = 0;
   const options = Object.assign({}, defaultConfig, config);
-  const elementObject = Object.assign(document.createElement('code'), {
-    className: 'jsondrop',
-    innerHTML: translate(null, obj, false, depth < options.autoOpenDepth)
-  });
+  const outputElement = Object.assign(document.createElement('code'), { className: 'jsondrop' });
+  const renderedObject = renderEntry([null, obj], options.autoOpenDepth > 0);
+  outputElement.append(renderedObject);
 
-  if (obj !== Object(obj)) {
-    return elementObject;
+  if (obj !== Object(obj)) return outputElement;
+
+  let renderStack = new Map([[renderedObject, obj]]);
+  let depth = 1;
+
+  while (renderStack.size > 0) {
+    const open = depth < options.autoOpenDepth;
+    const newRenderStack = new Map();
+
+    for (const [targetElement, data] of renderStack) {
+      Object.entries(data).forEach(([key, value]) => {
+        const renderedEntry = renderEntry([Array.isArray(data) ? null : key, value], open);
+        targetElement.append(renderedEntry);
+        if (renderedEntry instanceof HTMLDetailsElement) newRenderStack.set(renderedEntry, value);
+      });
+    }
+
+    renderStack = newRenderStack;
+    depth++;
   }
 
-  let keyList = Object.keys(obj);
-
-  do {
-    depth++;
-
-    let newKeyList = [];
-    const autoOpen = depth < options.autoOpenDepth;
-
-    keyList.forEach(key => {
-      const item = getValueFromKDS(obj, key);
-
-      if (item === Object(item)) {
-        newKeyList = newKeyList.concat(Object.keys(item).map(x => `${key}.${x}`));
-      }
-
-      const keyArray = key.split('.');
-      const valueName = keyArray.pop();
-      const targetKey = keyArray.join('.');
-      const selector = targetKey ? `[id="${targetKey}"]` : '[data-jsondrop-root]';
-      const target = elementObject.querySelector(selector);
-
-      target.innerHTML += translate(valueName, item, key, autoOpen);
-    });
-
-    keyList = newKeyList;
-  } while (keyList.length !== 0);
-
-  return elementObject;
+  return outputElement;
 };
