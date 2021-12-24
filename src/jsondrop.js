@@ -98,9 +98,9 @@ export default (inputValue, config = {}) => {
     const open = depth < autoOpenDepth;
     const newRenderStack = new Map();
 
-    for (const [targetElement, data] of renderStack) {
-      Object.entries(data).forEach(([key, value]) => {
-        const renderedEntry = renderEntry([Array.isArray(data) ? null : key, value], open);
+    for (const [targetElement, object] of renderStack) {
+      Object.entries(object).forEach(([key, value]) => {
+        const renderedEntry = renderEntry([Array.isArray(object) ? null : key, value], open);
         targetElement.append(renderedEntry);
         if (renderedEntry instanceof HTMLDetailsElement) newRenderStack.set(renderedEntry, value);
       });
