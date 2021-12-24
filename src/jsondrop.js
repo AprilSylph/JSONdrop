@@ -3,10 +3,8 @@ const defaultConfig = {
 };
 
 /**
- * Test if a string is a URL
- *
  * @param {string} string - String to test
- * @returns {boolean} True if the string is a valid, absolute URL
+ * @returns {boolean} True if the string can be interpreted as an absolute URL
  */
 const isUrl = string => {
   try {
@@ -17,11 +15,11 @@ const isUrl = string => {
 };
 
 /**
- * @param {Array} entry
+ * @param {Array} entry - Object entry
  * @param {string} [entry.key] - Entry key
  * @param {*} entry.value - Entry value
  * @param {boolean} open - If this object or array should display expanded
- * @returns {HTMLParagraphElement|HTMLDetailsElement} The rendered entry
+ * @returns {HTMLParagraphElement|HTMLDetailsElement} The entry rendered as an Element
  */
 const renderEntry = ([key, value], open) => {
   const paragraph = document.createElement('p');
