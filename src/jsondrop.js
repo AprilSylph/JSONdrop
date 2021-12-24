@@ -77,14 +77,11 @@ const renderEntry = ([key, value], open) => {
  * @returns {HTMLElement} A <code> element containing an interactive pretty-printed display of the input object
  */
 export default (obj, config = {}) => {
-  try {
-    JSON.stringify(obj);
-    Object.freeze(obj);
-  } catch (error) {
-    console.error(error);
-    obj = { [error.name]: error.message };
-    config.autoOpenDepth = 1;
-  }
+  // Clone the input object to ensure the data is rendered as it was supplied
+  if (typeof obj === 'object' && obj !== null) obj = Array.isArray(obj) ? [...obj] : { ...obj };
+
+  // Throw if stringify throws to prevent attempting to render cyclical values
+  JSON.stringify(obj);
 
   const options = Object.assign({}, defaultConfig, config);
   const outputElement = Object.assign(document.createElement('code'), { className: 'jsondrop' });

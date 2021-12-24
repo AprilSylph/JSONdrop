@@ -30,7 +30,11 @@ A configuration object. The following properties are supported:
 
 ### Return value
 
-`HTMLElement`. A `<code>` element displaying the data from the input object. If the input object could not be stringified or frozen, it will instead display the exception caught from `JSON.stringify()` or `Object.freeze()`.
+`HTMLElement`. A `<code>` element displaying the data from the input object.
+
+### Exceptions
+
+- `TypeError` if **`obj`** has a circular reference or contains a `BigInt` value.
 
 ## Styling
 
