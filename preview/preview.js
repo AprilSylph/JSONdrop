@@ -9,8 +9,9 @@ window.addEventListener('load', () => {
   try {
     const params = (new URL(location)).searchParams;
     const object = params.get('object');
+    const config = params.get('config') || '{}';
     if (object !== null) {
-      window.preview(JSON.parse(object), JSON.parse(params.get('config')));
+      window.preview(JSON.parse(object), JSON.parse(config));
     }
   } catch (error) {
     const object = {};

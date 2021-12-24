@@ -1,7 +1,3 @@
-const defaultConfig = {
-  autoOpenDepth: 0
-};
-
 /**
  * @param {string} string - String to test
  * @returns {boolean} True if the string can be interpreted as an absolute URL
@@ -85,9 +81,12 @@ export default (inputValue, config = {}) => {
   // Throw if stringify throws to prevent attempting to render cyclical values
   JSON.stringify(inputValue);
 
-  const options = Object.assign({}, defaultConfig, config);
+  const {
+    autoOpenDepth = 0
+  } = config;
+
   const outputElement = Object.assign(document.createElement('code'), { className: 'jsondrop' });
-  const renderedObject = renderEntry([null, inputValue], options.autoOpenDepth > 0);
+  const renderedObject = renderEntry([null, inputValue], autoOpenDepth > 0);
   outputElement.append(renderedObject);
 
   if (inputValue !== Object(inputValue)) return outputElement;
@@ -96,7 +95,7 @@ export default (inputValue, config = {}) => {
   let depth = 1;
 
   while (renderStack.size > 0) {
-    const open = depth < options.autoOpenDepth;
+    const open = depth < autoOpenDepth;
     const newRenderStack = new Map();
 
     for (const [targetElement, data] of renderStack) {
