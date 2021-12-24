@@ -83,6 +83,7 @@ export default (obj, config = {}) => {
   } catch (error) {
     console.error(error);
     obj = { [error.name]: error.message };
+    config.autoOpenDepth = 1;
   }
 
   const options = Object.assign({}, defaultConfig, config);
