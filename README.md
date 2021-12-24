@@ -24,9 +24,9 @@ let outputElement = jsondrop(inputValue, config);
 **`inputValue`**  
 The value to convert to HTML. Object properties must be own, enumerable, and string-keyed to be rendered.
 
-**`config`**  
+**`config`** (Optional)  
 A configuration object. The following properties are supported:
-- **`autoOpenDepth`** - `number` specifying how deep to automatically expand the object properties. Default: `0`
+- **`autoOpenDepth`** (Optional) - `number` specifying how deep to automatically expand the object properties. Default: `0`
 
 ### Return value
 
