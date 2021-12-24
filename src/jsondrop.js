@@ -76,21 +76,23 @@ const renderEntry = ([key, value], open) => {
  * @param {number} [config.autoOpenDepth] - How deep to auto-expand objects (default: 0)
  * @returns {HTMLElement} A <code> element containing an interactive pretty-printed display of the input object
  */
-export default (obj, config = {}) => {
+export default (inputValue, config = {}) => {
   // Clone the input object to ensure the data is rendered as it was supplied
-  if (typeof obj === 'object' && obj !== null) obj = Array.isArray(obj) ? [...obj] : { ...obj };
+  if (typeof inputValue === 'object' && inputValue !== null) {
+    inputValue = Array.isArray(inputValue) ? [...inputValue] : { ...inputValue };
+  }
 
   // Throw if stringify throws to prevent attempting to render cyclical values
-  JSON.stringify(obj);
+  JSON.stringify(inputValue);
 
   const options = Object.assign({}, defaultConfig, config);
   const outputElement = Object.assign(document.createElement('code'), { className: 'jsondrop' });
-  const renderedObject = renderEntry([null, obj], options.autoOpenDepth > 0);
+  const renderedObject = renderEntry([null, inputValue], options.autoOpenDepth > 0);
   outputElement.append(renderedObject);
 
-  if (obj !== Object(obj)) return outputElement;
+  if (inputValue !== Object(inputValue)) return outputElement;
 
-  let renderStack = new Map([[renderedObject, obj]]);
+  let renderStack = new Map([[renderedObject, inputValue]]);
   let depth = 1;
 
   while (renderStack.size > 0) {

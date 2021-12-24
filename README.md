@@ -16,12 +16,12 @@ If the object cannot be parsed, it shall display an automatically-expanded objec
 `jsondrop.js` is an ES6 module which defines one method.
 
 ```js
-let outputElement = jsondrop(obj, config);
+let outputElement = jsondrop(inputValue, config);
 ```
 
 ### Parameters
 
-**`obj`**  
+**`inputValue`**  
 The value to convert to HTML. Object properties must be own, enumerable, and string-keyed to be rendered.
 
 **`config`**  
@@ -34,7 +34,7 @@ A configuration object. The following properties are supported:
 
 ### Exceptions
 
-- `TypeError` if **`obj`** has a circular reference or contains a `BigInt` value.
+- `TypeError` if **`inputValue`** has a circular reference or contains a `BigInt` value.
 
 ## Styling
 
