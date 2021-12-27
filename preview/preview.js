@@ -1,4 +1,4 @@
-import jsondrop from '../src/jsondrop.js';
+import jsondrop from '../dist/jsondrop.min.js';
 
 window.preview = (inputValue, config) => document.body.replaceChildren(jsondrop(inputValue, config));
 
