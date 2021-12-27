@@ -1,4 +1,9 @@
 /**
+ * @copyright https://github.com/AprilSylph/JSONdrop
+ * @license GPL-3.0
+ */
+
+/**
  * @param {string} string - String to test
  * @returns {boolean} True if the string can be interpreted as an absolute URL
  */
