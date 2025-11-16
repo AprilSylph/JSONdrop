@@ -6,12 +6,12 @@
     "build": "minify src/jsondrop.js > dist/jsondrop.min.js; minify src/jsondrop.css > dist/jsondrop.min.css"
   },
   "devDependencies": {
-    "eslint": "^7.32.0",
+    "eslint": "^9.39.1",
     "eslint-config-semistandard": "^16.0.0",
-    "eslint-config-standard": "^16.0.3",
+    "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^5.2.0",
+    "eslint-plugin-promise": "^7.2.1",
     "minify": "^8.0.3"
   }
 }
